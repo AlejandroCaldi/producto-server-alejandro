@@ -1,0 +1,20 @@
+.vertical {
+
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+    margin: 3px;
+    gap: 5px;
+}
+
+.horizontal {
+    display:flex;
+    flex-direction: row;
+    padding: 3px;
+    gap: 5px;
+}
+
+.botonera {
+
+    margin: 2px;
+}

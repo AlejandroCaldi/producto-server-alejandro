@@ -6,7 +6,7 @@ para el front
 npm init -y
 npm install 
 npm install jquery
-npm install parcel
+npm install --save-dev parcel
 npm install bootstrap@3.4.1
 
 ´´´

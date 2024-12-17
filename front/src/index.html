@@ -16,14 +16,12 @@
     <header>
         <h1> Manejo de Inventario</h1>
 
-        <button id="venta" class="btn btn-success btn-lg">Venta</button>
-        <button id="baja" class="btn btn-danger btn-lg"> Roturas y Bajas</button>
-        <button id="altas" class="btn btn-warning btn-lg"> Altas </button>
-        <button id="boton_lista" class="btn btn-info btn-lg"> Listar </button>
+        <button id="boton_lista" class="btn btn-info btn-lg"> Refrescar </button>
     </header>
     <br>
-    <br>
     <maestro hidden>
+
+        <h3> Inventario </h3>
         <table class="table">
             <thead class="thead-dark container">
 
@@ -32,6 +30,7 @@
                 <th>Descripción</th>
                 <th>Cantidad</th>
                 <th>Precio</th>
+                <th>Acciones </th>
 
             </thead>
             <tbody id="listado">
@@ -44,8 +43,46 @@
 
     <detalle>
 
-        <h1 id="titulo_detalle" hidden></h1>   <!-- Título variable dependiendo de la operación...-->
+        <venta id="venta" hidden>
+            <form class="detalle vertical">
+                <datafield>
+                    <legend> Registración de Venta</legend>
 
+                    <div class="horizontal">
+                        <input type="hidden" id="id" name="id" hidden>
+                        <label for="cliente">Cliente:</label>
+                        <input type="text" id="nombre" name="nombre">
+                    </div>
+                    <div class="horizontal"></div>
+                    <label for="nombre">Nombre Producto:</label>
+                    <select id="productos_venta" id="productos" name="nombre">
+                    </select>
+                    </div>
+                    <p id="descripcion"> Por ahora nada.</p>
+
+                    <div class="horizontal">
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="number" id="cantidad_venta" name="cantidad_venta" class="Roboto">
+                    </div>
+                    <div class="horizontal">
+                        <button id="boton_graba" class="btn btn-success">Grabar</button>
+                        <button id="boton_cancela" class="btn btn-warning">Cancelar</button>
+                    </div>
+                </datafield>
+
+            </form>
+
+        </venta>
+
+        <alta hidden>
+
+
+        </alta>
+
+        <baja hidden>
+
+
+        </baja>
 
 
 
