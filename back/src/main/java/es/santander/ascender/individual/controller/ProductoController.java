@@ -46,7 +46,7 @@ public class ProductoController {
         return ResponseEntity.ok().body(productos.values());
     }
 
-    @PostMapping("/alta")
+    @PostMapping
     public ResponseEntity<Producto> create(@RequestBody Producto producto) {
         long cuenta = productos.values().size();
         

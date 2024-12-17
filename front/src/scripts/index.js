@@ -188,7 +188,7 @@ $(document).ready(function () {
             console.log(JSON.stringify(envio)); 
 
             $.ajax({
-                url: 'https://localhost:1234/api/productos/alta', // Adjusted by Parcel to remove "/api"
+                url: 'https://localhost:1234/api/productos', // Adjusted by Parcel to remove "/api"
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(envio), 
