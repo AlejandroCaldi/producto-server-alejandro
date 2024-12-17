@@ -1,3 +1,9 @@
+
+body{
+
+    margin-left: 10px;
+}
+
 .vertical {
 
     display: flex;
@@ -5,6 +11,7 @@
     padding: 3px;
     margin: 3px;
     gap: 5px;
+    background-color: grey;
 }
 
 .horizontal {
@@ -18,3 +25,5 @@
 
     margin: 2px;
 }
+
+

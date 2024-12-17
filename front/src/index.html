@@ -55,8 +55,6 @@
                     </div>
                     <div class="horizontal"></div>
                     <label for="nombre">Nombre Producto:</label>
-                    <select id="productos_venta" id="productos" name="nombre">
-                    </select>
                     </div>
                     <p id="descripcion"> Por ahora nada.</p>
 
@@ -79,10 +77,29 @@
 
         </alta>
 
-        <baja hidden>
+        <cambioprecio id="cambio_precio"  hidden>
+            <datafield>
+                <legend> Cambio de Precio</legend>
+                <div class="horizontal">
+                    <input type="hidden" id="id_cambio_precio" name="id_cambio_precio" hidden>
+                    <label for="nombre_cambio_precio">Nombre Producto:</label>
+                    <input type="text" id="nombre_cambio_precio" name="nombre_cambio_precio" disabled>
+                </div>
+                <div class="horizontal">
+                    <label for="descripcion">Descripción:</label>
+                    <input type="text" id="descripcion_cambio_precio" name="descripcion_cambio_precio" disabled>
+                </div>
+                <div class="horizontal">
+                    <label for="precio">Nuevo Precio: </label>
+                    <input type="text" id="precio_cambio_precio" name="precio_cambio_precio">
+                </div>
+                <div class="horizontal">
+                    <button id="boton_graba_cambio_precio" class="btn btn-success">Grabar</button>
+                    <button id="boton_cancela" class="btn btn-warning">Cancelar</button>
+                </div>
+            </datafield>
 
-
-        </baja>
+        </cambioprecio>
 
 
 

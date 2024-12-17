@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.santander.ascender.individual.model.Producto;
 import jakarta.validation.Valid;
+import singletons.PrecioDTO;
 
 @RestController
 @RequestMapping(path = "/productos")
@@ -122,6 +123,22 @@ public class ProductoController {
         producto.setCantidad(producto.getCantidad() + 1);
 
         return ResponseEntity.ok("Compra realizada con éxito. Producto: " + producto.getNombre());
+    }
+
+
+    @PutMapping("/precio")
+    public ResponseEntity<String> cambiarPrecio(@RequestBody PrecioDTO precioDTO) {
+        long id = precioDTO.getId();
+        float nuevoPrecio = precioDTO.getPrecio();
+        Producto producto = productos.get(id);
+
+        if (producto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        producto.setPrecio(nuevoPrecio);
+
+        return ResponseEntity.ok("Cambio de Precio realizado con éxito: Nuevo Precio" + producto.getPrecio());
     }
 
 
