@@ -42,6 +42,7 @@ $(document).ready(function () {
 
                     $maestro.show();
                     $padre.show();
+                    $("cambioprecio").hide();
                     console.log("Refrescaso de tabla ejecutado");
                     console.log(articulos);
 
@@ -146,8 +147,7 @@ $(document).ready(function () {
     });
 
     $('#listado').on("click", ".boton_precio", function (event) {
-
-        event.preventDefault() // Esto o si no, al menos en Brave, cuelga por razòn no informada en inspector y debugguer. 
+        event.preventDefault(); // Prevent default behavior
 
         let $row = $(this).closest('tr');
         let prodId = $row.find('td').eq(0).text();
@@ -155,7 +155,7 @@ $(document).ready(function () {
         let prodDescripcion = $row.find('td').eq(2).text();
         let prodPrecio = $row.find('td').eq(4).text();
 
-        let $precio = $("cambioprecio");
+        let $precio = $("#cambio_precio"); 
         $precio.show();
 
         $("#id_cambio_precio").val(prodId);
@@ -163,16 +163,7 @@ $(document).ready(function () {
         $("#descripcion_cambio_precio").val(prodDescripcion);
         $("#precio_cambio_precio").val(prodPrecio);
 
-        $("#boton_cancela").on("click", function () {
-
-            $precio.hide();
-            refrescarListado();
-
-        });
-
         $("#boton_graba_cambio_precio").on("click", function () {
-
-
             let envio = { id: prodId, precio: $("#precio_cambio_precio").val() };
             $.ajax({
                 url: 'http://localhost:1234/api/productos/precio',
@@ -187,10 +178,14 @@ $(document).ready(function () {
                 error: function (xhr, status, error) {
                     console.log('Error: ' + error);
                 }
-
             });
+        });
 
+        $("#boton_cancela_precio").on("click", function (event) {
+            event.preventDefault();
+            $precio.hide();
         });
     });
 
+    
 });
