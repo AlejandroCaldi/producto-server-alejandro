@@ -111,6 +111,19 @@ public class ProductoController {
         return ResponseEntity.ok("Compra realizada con éxito. Producto: " + producto.getNombre());
     }
 
+    @PostMapping("/{id}/reposicion")
+    public ResponseEntity<String> reponerProducto(@PathVariable Long id) {
+        Producto producto = productos.get(id);
+
+        if (producto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        producto.setCantidad(producto.getCantidad() + 1);
+
+        return ResponseEntity.ok("Compra realizada con éxito. Producto: " + producto.getNombre());
+    }
+
 
     public Map<Long, Producto> getProductos() {
         return productos;
