@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    </link>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="./scripts/index.js"></script>
+    <link href="estilos/estilos.css" rel="stylesheet" />
+    <title>Manejo Inventario</title>
+</head>
+
+<body>
+    <header>
+        <h1> Manejo de Inventario</h1>
+
+        <button id="venta" class="btn btn-success btn-lg">Venta</button>
+        <button id="baja" class="btn btn-danger btn-lg"> Roturas y Bajas</button>
+        <button id="altas" class="btn btn-warning btn-lg"> Altas </button>
+        <button id="boton_lista" class="btn btn-info btn-lg"> Listar </button>
+    </header>
+    <br>
+    <br>
+    <maestro hidden>
+        <table class="table">
+            <thead class="thead-dark container">
+
+                <Id hidden>ID Producto</Id>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+
+            </thead>
+            <tbody id="listado">
+
+                <!-- Acá va el refreso de listado de productos ...-->
+            </tbody>
+        </table>
+
+    </maestro>
+
+    <detalle>
+
+        <h1 id="titulo_detalle" hidden></h1>   <!-- Título variable dependiendo de la operación...-->
+
+
+
+
+    </detalle>
+
+
+</body>
+
+</html>
