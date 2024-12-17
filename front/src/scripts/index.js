@@ -2,8 +2,6 @@ console.log("Empieza la página...")
 
 let articulos = [];
 
-$.get("http://localhost:1234/api/productos")
-
 $(document).ready(function () {
 
     function refrescarListado() {
@@ -42,6 +40,7 @@ $(document).ready(function () {
 
                     $maestro.show();
                     $padre.show();
+                    $("nuevo").hide();
                     $("cambioprecio").hide();
                     console.log("Refrescaso de tabla ejecutado");
                     console.log(articulos);
@@ -59,33 +58,13 @@ $(document).ready(function () {
     };
 
 
-    function detalleVenta() {
-
-
-        articulos.forEach(x => {
-            console.log(x.id);
-            let $select = $("#productos_venta");
-            let $option = $("<option>");
-            $option.append($('<select>').text(x.nombre));
-            $select.append($option);
-
-        });
-
-        $padre_venta = $("#venta");
-        $padre_venta.show();
-
-    }
-
-    window.detalleVenta = detalleVenta
-
-    $("#boton_venta").on("click", function () {
-
-        detalleVenta();
-
-    });
-
     refrescarListado();
 
+    $("#boton_lista").on("click", function (event) {
+        event.preventDefault();
+        refrescarListado();
+
+    });
 
     // Registrar una compra
     $('#listado').on("click", ".boton_compra", function (event) {
@@ -187,5 +166,48 @@ $(document).ready(function () {
         });
     });
 
-    
+    $("#boton_nuevo").on("click", function (event) {
+        event.preventDefault();
+        let $nuevo =  $("#nuevo")
+        $nuevo.show();
+
+        $("#boton_graba_nuevo").on("click", function () {
+            event.preventDefault();
+
+            let nombre_nuevo =  $("#nombre_nuevo").val();
+            let descripcion_nuevo = $('#descripcion_nuevo').val();
+            let cantidad_nuevo =  $('#cantidad_nuevo').val();
+            let precio_nuevo = $("#precio_nuevo").val();
+
+            let envio = { id: 0, 
+                          nombre: nombre_nuevo,
+                          descripcion: descripcion_nuevo,
+                          cantidad:cantidad_nuevo,  
+                          precio: precio_nuevo };
+
+            console.log(JSON.stringify(envio)); 
+
+            $.ajax({
+                url: 'https://localhost:1234/api/productos/alta', // Adjusted by Parcel to remove "/api"
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(envio), 
+                success: function (result) {
+                    console.log('Respuesta: ' + result);
+                    // $precio.hide();
+                    // refrescarListado();
+                },
+                error: function (xhr, status, error, envio) {
+                    console.log('Error: ' + error + " . El envío era:" + JSON.stringify(envio));
+                }
+            });
+        });
+
+        $("#boton_cancela_nuevo").on("click", function (event) {
+            event.preventDefault();
+            $precio.hide();
+        });
+    });
+
+
 });

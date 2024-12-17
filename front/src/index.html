@@ -42,70 +42,63 @@
 
     </maestro>
 
-    <detalle>
-
-        <venta id="venta" hidden>
-            <form class="detalle vertical">
-                <datafield>
-                    <legend> Registración de Venta</legend>
-
-                    <div class="horizontal">
-                        <input type="hidden" id="id" name="id" hidden>
-                        <label for="cliente">Cliente:</label>
-                        <input type="text" id="nombre" name="nombre">
-                    </div>
-                    <div class="horizontal"></div>
-                    <label for="nombre">Nombre Producto:</label>
-                    </div>
-                    <p id="descripcion"> Por ahora nada.</p>
-
-                    <div class="horizontal">
-                        <label for="cantidad">Cantidad:</label>
-                        <input type="number" id="cantidad_venta" name="cantidad_venta" class="Roboto">
-                    </div>
-                    <div class="horizontal">
-                        <button id="boton_graba" class="btn btn-success">Grabar</button>
-                        <button id="boton_cancela" class="btn btn-warning">Cancelar</button>
-                    </div>
-                </datafield>
-
-            </form>
-
-        </venta>
-
-        <alta hidden>
-
-
-        </alta>
-
-        <cambioprecio id="cambio_precio"  hidden>
+    <nuevo id="nuevo" hidden>
+        <form class="vertical">
             <datafield>
-                <legend> Cambio de Precio</legend>
+                <legend> Registración de Nuevo Producto</legend>
+
                 <div class="horizontal">
-                    <input type="hidden" id="id_cambio_precio" name="id_cambio_precio" hidden>
-                    <label for="nombre_cambio_precio">Nombre Producto:</label>
-                    <input type="text" id="nombre_cambio_precio" name="nombre_cambio_precio" disabled>
+                    <input type="hidden" id="id" name="id" hidden>
+                    <label for="nombre_nuevo">Nombre:</label>
+                    <input type="text" id="nombre_nuevo" name="nombre_nuevo">
                 </div>
                 <div class="horizontal">
-                    <label for="descripcion">Descripción:</label>
-                    <input type="text" id="descripcion_cambio_precio" name="descripcion_cambio_precio" disabled>
+                <label for="descripcion_nuevo">Descripción:</label>
+                <input type="text" id="descripcion_nuevo" name="descripcion_nuevo">
+                </div>
+
+
+                <div class="horizontal">
+                    <label for="cantidad_nuevo">Cantidad:</label>
+                    <input type="number" id="cantidad_nuevo" name="cantidad_nuevo" class="Roboto">
                 </div>
                 <div class="horizontal">
-                    <label for="precio">Nuevo Precio: </label>
-                    <input type="text" id="precio_cambio_precio" name="precio_cambio_precio">
+                    <label for="precio_nuevo">Precio:</label>
+                    <input type="number" id="precio_nuevo" name="precio_nuevo" class="Roboto">
                 </div>
                 <div class="horizontal">
-                    <button id="boton_graba_cambio_precio" class="btn btn-success">Grabar</button>
-                    <button id="boton_cancela_precio" class="btn btn-warning">Cancelar</button>
+                    <button id="boton_graba_nuevo" class="btn btn-success">Grabar</button>
+                    <button id="boton_cancela_nuevo" class="btn btn-warning">Cancelar</button>
                 </div>
             </datafield>
 
-        </cambioprecio>
+        </form>
 
+    </nuevo>
 
+    <cambioprecio id="cambio_precio" hidden>
+        <datafield>
+            <legend> Cambio de Precio</legend>
+            <div class="horizontal">
+                <input type="hidden" id="id_cambio_precio" name="id_cambio_precio" hidden>
+                <label for="nombre_cambio_precio">Nombre Producto:</label>
+                <input type="text" id="nombre_cambio_precio" name="nombre_cambio_precio" disabled>
+            </div>
+            <div class="horizontal">
+                <label for="descripcion">Descripción:</label>
+                <input type="text" id="descripcion_cambio_precio" name="descripcion_cambio_precio" disabled>
+            </div>
+            <div class="horizontal">
+                <label for="precio">Nuevo Precio: </label>
+                <input type="text" id="precio_cambio_precio" name="precio_cambio_precio">
+            </div>
+            <div class="horizontal">
+                <button id="boton_graba_cambio_precio" class="btn btn-success">Grabar</button>
+                <button id="boton_cancela_precio" class="btn btn-warning">Cancelar</button>
+            </div>
+        </datafield>
 
-    </detalle>
-
+    </cambioprecio>
 
 </body>
 

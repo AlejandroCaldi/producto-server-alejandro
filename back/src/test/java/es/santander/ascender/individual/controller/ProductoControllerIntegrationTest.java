@@ -1,6 +1,5 @@
 package es.santander.ascender.individual.controller;
 
-import es.santander.ascender.individual.model.Producto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import es.santander.ascender.individual.model.Producto;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
