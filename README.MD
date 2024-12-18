@@ -17,6 +17,6 @@ Cambios a realizar:
 
 Nombres de botón resumidos
 Decimales al precio. 
-Manejo de inventario precisa sacar redundandia.
+Manejo de inventario precisa sacar redundancia.
 
 Chequeo final de los controles de campos vacíos. 

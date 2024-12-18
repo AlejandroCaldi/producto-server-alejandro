@@ -26,11 +26,11 @@ $(document).ready(function () {
                         $linea.append($('<td class="renglon mt-3 md-3">').text(x.nombre));
                         $linea.append($('<td class="renglon mt-3md-3">').text(x.descripcion));
                         $linea.append($('<td class="renglon mt-3md-3 text-right">').text(x.cantidad));
-                        $linea.append($('<td class="renglon mt-3md-3 text-right">').text(x.precio));
+                        $linea.append($('<td class="renglon mt-3md-3 text-right">').text( x.precio.toFixed(2)));
                         $linea.append($('<td>').append($(`<button class="btn btn-success btn-lg botonera boton_compra">Compra
-                                                          </button><button class="btn btn-info btn-lg botonera boton_reposicion">Reposicion</button>
-                                                          </button><button class="btn btn-warning btn-lg botonera boton_edicion">Edición Registro</button>
-                                                          </button><button class="btn btn-danger btn-lg botonera boton_baja">Borrar Registro</button>
+                                                          </button><button class="btn btn-info btn-lg botonera boton_reposicion">Reposición</button>
+                                                          </button><button class="btn btn-warning btn-lg botonera boton_edicion">Editar</button>
+                                                          </button><button class="btn btn-danger btn-lg botonera boton_baja">Borrar</button>
                                                           `)));
 
                         $padre.append($linea);
