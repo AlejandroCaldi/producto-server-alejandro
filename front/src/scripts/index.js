@@ -159,7 +159,8 @@ $(document).ready(function () {
         let prodPrecio = Number($("#precio_edicion").val());
         let prodCantidad = Number($("#cantidad_edicion").val());
 
-        if (prodNombre != "" || prodDescripcion == "" || prodCantidad != "" || prodPrecio != "") {
+        if (prodNombre.length > 0 && 
+            prodDescripcion.length > 0) {
 
 
             let envio = { id: prodId, precio: prodPrecio, nombre: prodNombre, descripcion: prodDescripcion, cantidad: prodCantidad };
@@ -180,6 +181,12 @@ $(document).ready(function () {
         } else {
 
             alert("Complete Todos los campos");
+
+            $("#id_edicion").val();
+            $("#nombre_edicion").val();
+            $("#descripcion_edicion").val();
+            $("#cantidad_edicion").val();
+            $("#precio_edicion").val();
 
         }
     });
@@ -274,7 +281,7 @@ $(document).ready(function () {
                     console.log('Error: ' + error + " . El envío era:" + JSON.stringify(envio));
                 }
             });
-            
+
         } else {
 
             alert("Tods los campos deben ser completados.");
