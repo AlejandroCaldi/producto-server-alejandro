@@ -109,6 +109,28 @@
         </form>
     </cambioprecio>
 
+    <compraventa id="compraventa" hidden>
+        <form id="form_compraventa">
+            <h3 id="title_compraventa"> Detalle </h3>
+            <datafield>
+                <legend id="legend_compraventa"> </legend>
+                <div class="horizontal">
+                    <input type="hidden" id="id_compraventa" name="id_edicion" hidden>
+                    <label for="nombre_compraventa">Nombre Producto:</label>
+                    <input type="text" id="nombre_compraventa" name="nombre_compraventa" required>
+                </div>
+                <div class="horizontal">
+                    <label for="cantidad_compraventa">Cantidad: </label>
+                    <input type="number" id="cantidad_compraventa" name="cantidad_compraventa" required>
+                </div>
+                <div class="horizontal">
+                    <button id="boton_graba_compraventa" class="btn btn-success">Grabar</button>
+                    <button id="boton_cancela_compraventa" class="btn btn-warning">Cancelar</button>
+                </div>
+            </datafield>
+        </form>
+    </compraventa>
+
 </body>
 
 </html>

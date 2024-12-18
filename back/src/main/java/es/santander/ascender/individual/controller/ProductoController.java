@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.santander.ascender.individual.model.Producto;
 import jakarta.validation.Valid;
-import singletons.PrecioDTO;
 
 @RestController
 @RequestMapping(path = "/productos")
@@ -95,34 +94,43 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/compra")
-    public ResponseEntity<String> comprarProducto(@PathVariable Long id) {
+    @PostMapping("/compra")
+    public ResponseEntity<String> comprarProducto(@RequestBody Producto comprado) {
+        long id = comprado.getId();
+        int cantidadComprada = comprado.getCantidad();
+        
         Producto producto = productos.get(id);
 
         if (producto == null) {
             return ResponseEntity.notFound().build();
         }
 
-        if (producto.getCantidad() <= 0) {
+        if (cantidadComprada > producto.getCantidad()) {
+
             return ResponseEntity.badRequest().body("Producto sin stock disponible.");
         }
 
-        producto.setCantidad(producto.getCantidad() - 1);
+        producto.setCantidad(producto.getCantidad() - cantidadComprada);
 
         return ResponseEntity.ok("Compra realizada con éxito. Producto: " + producto.getNombre());
     }
 
-    @PostMapping("/{id}/reposicion")
-    public ResponseEntity<String> reponerProducto(@PathVariable Long id) {
+    @PostMapping("/reposicion")
+    public ResponseEntity<String> reponerProducto(@RequestBody Producto comprado) {
+        long id = comprado.getId();
+        int cantidadRepuesta = comprado.getCantidad();
+        
         Producto producto = productos.get(id);
 
         if (producto == null) {
             return ResponseEntity.notFound().build();
         }
 
-        producto.setCantidad(producto.getCantidad() + 1);
 
-        return ResponseEntity.ok("Compra realizada con éxito. Producto: " + producto.getNombre());
+        producto.setCantidad(producto.getCantidad() + cantidadRepuesta);
+
+        return ResponseEntity.ok("Reposición realizada con éxito. Producto: " + producto.getNombre());
+
     }
 
 

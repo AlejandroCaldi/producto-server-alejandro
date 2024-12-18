@@ -1,6 +1,8 @@
 
 let articulos = [];
 
+let operacion_compraventa = 0; // 0 equivale a compra, 1 a reposición
+
 $(document).ready(function () {
 
     function refrescarListado() {
@@ -26,7 +28,7 @@ $(document).ready(function () {
                         $linea.append($('<td class="renglon mt-3 md-3">').text(x.nombre));
                         $linea.append($('<td class="renglon mt-3md-3">').text(x.descripcion));
                         $linea.append($('<td class="renglon mt-3md-3 text-right">').text(x.cantidad));
-                        $linea.append($('<td class="renglon mt-3md-3 text-right">').text( x.precio.toFixed(2)));
+                        $linea.append($('<td class="renglon mt-3md-3 text-right">').text(x.precio.toFixed(2)));
                         $linea.append($('<td class="text-center">').append($(`<button class="btn btn-success btn-lg botonera text-center boton_compra">Compra
                                 </button><button class="btn btn-info btn-lg botonera boton_reposicion">Reposición</button>
                                 </button><button class="btn btn-warning btn-lg botonera boton_edicion">Editar</button>
@@ -41,6 +43,8 @@ $(document).ready(function () {
                     $padre.show();
                     $("nuevo").hide();
                     $("cambioprecio").hide();
+                    $("compraventa").hide();
+                    $("compraventa").hide();
                     console.log("Refrescaso de tabla ejecutado");
                     console.log(articulos);
 
@@ -65,64 +69,98 @@ $(document).ready(function () {
 
     });
 
-    // Registrar una compra
-    $('#listado').on("click", ".boton_compra", function (event) {
-
-        event.preventDefault() // Esto o si no, al menos en Brave, cuelga por razòn no informada en inspector y debugguer. 
-
-        let $row = $(this).closest('tr');
-        let solId = $row.find('td').eq(0).text();
-
-        console.log("Id es: " + solId);
-
-        $.ajax({
-            url: 'http://localhost:1234/api/productos/' + solId + "/compra",
-            method: "POST",
-            contentType: "application/json",
-            success: function (result) {
-
-                console.log("resultado de la compra: " + result)
-
-            },
-            error: function (xhr, status, error) {
-
-                console.log("resultado de la compra: " + error)
-
-            }
+    $(document).ready(function() {
+        $('#listado').on("click", ".boton_compra", function(event) {
+            event.preventDefault(); // Prevent default action
+    
+            let $row = $(this).closest('tr');
+            let prodId = $row.find('td').eq(0).text();
+            let prodNombre = $row.find('td').eq(1).text();
+            let prodCantidad = $row.find('td').eq(3).text();
+    
+            operacion_compraventa = 0;
+    
+            $("#legend_compraventa").text("Compra");
+            $("#id_compraventa").val(prodId);
+            $("#nombre_compraventa").val(prodNombre);
+            $("#nombre_compraventa").prop('disabled', true);
+            $("#cantidad_compraventa").val(prodCantidad);
+            $("#nuevo").hide();
+            $("#edicion").hide();
+            $("#compraventa").show(); // Corrected selector
         });
-
-        refrescarListado();
-
+    
+        $('#listado').on("click", ".boton_reposicion", function(event) {
+            event.preventDefault(); // Prevent default action
+    
+            let $row = $(this).closest('tr');
+            let prodId = $row.find('td').eq(0).text();
+            let prodNombre = $row.find('td').eq(1).text();
+            let prodCantidad = $row.find('td').eq(3).text();
+    
+            operacion_compraventa = 1;
+    
+            $("#legend_compraventa").text("Reposición");
+            $("#id_compraventa").val(prodId);
+            $("#nombre_compraventa").val(prodNombre);
+            $("#nombre_compraventa").prop('disabled', true);
+            $("#cantidad_compraventa").val(prodCantidad);
+            $("#nuevo").hide();
+            $("#edicion").hide();
+            $("#compraventa").show(); // Corrected selector
+        });
+    
+        $("#boton_graba_compraventa").on("click", function(event) {
+            event.preventDefault(); // Prevent default action
+            
+            let prodId = $("#id_compraventa").val();
+            let prodCantidad = $("#cantidad_compraventa").val(); // Corrected variable name
+    
+            let envio = { id: prodId, precio: 0, nombre: "", descripcion: "", cantidad: prodCantidad };
+    
+            if (operacion_compraventa == 0) {
+                $.ajax({
+                    url: 'http://localhost:1234/api/productos/compra',
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(envio),
+                    success: function(result) {
+                        console.log("resultado de la compra: " + result);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("resultado de la compra: " + error);
+                        alert("La compra excedería la cantidad en inventario");
+                    }
+                });
+            }
+    
+            if (operacion_compraventa == 1) {
+                $.ajax({
+                    url: 'http://localhost:1234/api/productos/reposicion',
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(envio),
+                    success: function(result) {
+                        console.log("resultado de la reposición: " + result);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("resultado de la reposición: " + error);
+                    }
+                });
+            }
+    
+            refrescarListado(); // Make sure this function doesn't cause a page reload
+        });
     });
 
-    $('#listado').on("click", ".boton_reposicion", function (event) {
-
-        event.preventDefault() // Esto o si no, al menos en Brave, cuelga por razòn no informada en inspector y debugguer. 
-
-        let $row = $(this).closest('tr');
-        let solId = $row.find('td').eq(0).text();
-
-        console.log("Id es: " + solId);
-
-        $.ajax({
-            url: 'http://localhost:1234/api/productos/' + solId + "/reposicion",
-            method: "POST",
-            contentType: "application/json",
-            success: function (result) {
-
-                console.log("resultado de la compra: " + result)
-
-            },
-            error: function (xhr, status, error) {
-
-                console.log("resultado de la compra: " + error)
-
-            }
-        });
-
-        refrescarListado();
-
+    // Cancela operación de cambio de precio. Borra el detalle y refresca el maestro. 
+    $("#boton_cancela_compraventa").on("click", function (event) {
+        event.preventDefault();
+        $("#edicion").hide();
+        $("#nuevo").hide();
+        $("#compraventa").hide();
     });
+
 
     // Habilita los controles para el cambio de precio
     $('#listado').on("click", ".boton_edicion", function (event) {
@@ -159,7 +197,7 @@ $(document).ready(function () {
         let prodPrecio = Number($("#precio_edicion").val());
         let prodCantidad = Number($("#cantidad_edicion").val());
 
-        if (prodNombre.length > 0 && 
+        if (prodNombre.length > 0 &&
             prodDescripcion.length > 0) {
 
 
@@ -194,8 +232,8 @@ $(document).ready(function () {
     // Cancela operación de cambio de precio. Borra el detalle y refresca el maestro. 
     $("#boton_cancela_edicion").on("click", function (event) {
         event.preventDefault();
-        $edicion = $("#edicion")
-        $edicion.hide();
+        $("#edicion").hide();
+        $("compraventa").hide();
     });
 
 
@@ -241,6 +279,7 @@ $(document).ready(function () {
         let $nuevo = $("#nuevo")
         $nuevo.show();
         $("#edicion").hide();
+        $("compraventa").hide();
     });
 
 
