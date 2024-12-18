@@ -1,4 +1,3 @@
-console.log("Empieza la página...")
 
 let articulos = [];
 
@@ -33,7 +32,7 @@ $(document).ready(function () {
                                                           </button><button class="btn btn-warning btn-lg botonera boton_edicion">Edición Registro</button>
                                                           </button><button class="btn btn-danger btn-lg botonera boton_baja">Borrar Registro</button>
                                                           `)));
-        
+
                         $padre.append($linea);
 
                     });
@@ -133,6 +132,7 @@ $(document).ready(function () {
         let prodId = $row.find('td').eq(0).text();
         let prodNombre = $row.find('td').eq(1).text();
         let prodDescripcion = $row.find('td').eq(2).text();
+        let prodCantidad = $row.find('td').eq(3).text();
         let prodPrecio = $row.find('td').eq(4).text();
 
         let $precio = $("#edicion");
@@ -142,35 +142,46 @@ $(document).ready(function () {
         $("#id_edicion").val(prodId);
         $("#nombre_edicion").val(prodNombre);
         $("#descripcion_edicion").val(prodDescripcion);
+        $("#cantidad_edicion").val(prodCantidad);
         $("#precio_edicion").val(prodPrecio);
-
 
     });
 
     // Graba el cambio de precio enviando petición al servidor.
-    $("#boton_graba_edicion").on("click", function () {
+    $("#boton_graba_edicion").on("click", function (event) {
+
+        event.preventDefault(); // Prevent default behavior
 
         let $precio = $("#edicion");
-        let prodId = $("#id_edicion").val();
+        let prodId = Number($("#id_edicion").val());
         let prodNombre = $("#nombre_edicion").val();
         let prodDescripcion = $("#descripcion_edicion").val();
-        let prodPrecio = $("#precio_edicion").val();
+        let prodPrecio = Number($("#precio_edicion").val());
+        let prodCantidad = Number($("#cantidad_edicion").val());
 
-        let envio = { id: prodId, precio: prodPrecio, nombre: prodNombre, descripcion: prodDescripcion, cantidad:0 };
-        $.ajax({
-            url: 'http://localhost:1234/api/productos/edicion',
-            method: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify(envio),
-            success: function (result) {
-                console.log('Respuesta: ' + result);
-                $precio.hide();
-                refrescarListado();
-            },
-            error: function (xhr, status, error) {
-                console.log('Error: ' + error);
-            }
-        });
+        if (prodNombre != "" || prodDescripcion == "" || prodCantidad != "" || prodPrecio != "") {
+
+
+            let envio = { id: prodId, precio: prodPrecio, nombre: prodNombre, descripcion: prodDescripcion, cantidad: prodCantidad };
+            $.ajax({
+                url: 'http://localhost:1234/api/productos/edicion',
+                method: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(envio),
+                success: function (result) {
+                    console.log('Respuesta: ' + result);
+                    $precio.hide();
+                    refrescarListado();
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error);
+                }
+            });
+        } else {
+
+            alert("Complete Todos los campos");
+
+        }
     });
 
     // Cancela operación de cambio de precio. Borra el detalle y refresca el maestro. 
@@ -235,29 +246,40 @@ $(document).ready(function () {
         let cantidad_nuevo = $('#cantidad_nuevo').val();
         let precio_nuevo = $("#precio_nuevo").val();
 
-        let envio = {
-            id: 0,
-            nombre: nombre_nuevo,
-            descripcion: descripcion_nuevo,
-            cantidad: cantidad_nuevo,
-            precio: precio_nuevo
-        };
+        if (nombre_nuevo != "" &&
+            descripcion_nuevo != "" &&
+            cantidad_nuevo != "" &&
+            precio_nuevo != "") {
 
-        console.log(JSON.stringify(envio));
+            let envio = {
+                id: 0,
+                nombre: nombre_nuevo,
+                descripcion: descripcion_nuevo,
+                cantidad: cantidad_nuevo,
+                precio: precio_nuevo
+            };
 
-        $.ajax({
-            url: 'http://localhost:1234/api/productos/alta', // Adjusted by Parcel to remove "/api"
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(envio),
-            success: function (result) {
-                console.log('Respuesta: ' + result);
-                refrescarListado();
-            },
-            error: function (xhr, status, error, envio) {
-                console.log('Error: ' + error + " . El envío era:" + JSON.stringify(envio));
-            }
-        });
+            console.log(JSON.stringify(envio));
+
+            $.ajax({
+                url: 'http://localhost:1234/api/productos/alta', // Adjusted by Parcel to remove "/api"
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(envio),
+                success: function (result) {
+                    console.log('Respuesta: ' + result);
+                    refrescarListado();
+                },
+                error: function (xhr, status, error, envio) {
+                    console.log('Error: ' + error + " . El envío era:" + JSON.stringify(envio));
+                }
+            });
+            
+        } else {
+
+            alert("Tods los campos deben ser completados.");
+
+        }
     });
 
     $("#boton_cancela_nuevo").on("click", function (event) {
