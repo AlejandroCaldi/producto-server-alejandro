@@ -34,3 +34,7 @@ table-bordered {
   .table-bordered td:first-child, .table-bordered th:first-child {
     border-left: 0;
   }
+
+.table-nonfluid {
+    width: 70% !important;
+ }
