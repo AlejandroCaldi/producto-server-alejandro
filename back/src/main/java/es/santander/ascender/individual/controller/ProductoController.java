@@ -126,19 +126,24 @@ public class ProductoController {
     }
 
 
-    @PutMapping("/precio")
-    public ResponseEntity<String> cambiarPrecio(@RequestBody PrecioDTO precioDTO) {
-        long id = precioDTO.getId();
-        float nuevoPrecio = precioDTO.getPrecio();
-        Producto producto = productos.get(id);
+    @PutMapping("/edicion")
+    public ResponseEntity<String> cambiarPrecio(@RequestBody Producto producto) {
+        long id = producto.getId();
+        float nuevoPrecio = producto.getPrecio();
+        String nuevoNombre = producto.getNombre();
+        String nuevoDescripcion = producto.getDescripcion();
+
+        Producto productoEditar = productos.get(id);
 
         if (producto == null) {
             return ResponseEntity.notFound().build();
         }
 
-        producto.setPrecio(nuevoPrecio);
+        productoEditar.setPrecio(nuevoPrecio);
+        productoEditar.setNombre(nuevoNombre);
+        productoEditar.setDescripcion(nuevoDescripcion);
 
-        return ResponseEntity.ok("Cambio de Precio realizado con éxito: Nuevo Precio" + producto.getPrecio());
+        return ResponseEntity.ok("Edición de datos de registro terminada con éxito para el id" + id);
     }
 
 

@@ -28,13 +28,12 @@ $(document).ready(function () {
                         $linea.append($('<td class="renglon mt-3md-3">').text(x.descripcion));
                         $linea.append($('<td class="renglon mt-3md-3 text-right">').text(x.cantidad));
                         $linea.append($('<td class="renglon mt-3md-3 text-right">').text(x.precio));
-                        //$linea.append($('<button id="boton_detalle" class="btn btn-info btn-lg botonera">Detalle</button>'));
                         $linea.append($('<td>').append($(`<button class="btn btn-success btn-lg botonera boton_compra">Compra
                                                           </button><button class="btn btn-info btn-lg botonera boton_reposicion">Reposicion</button>
-                                                          </button><button class="btn btn-warning btn-lg botonera boton_precio">Cambio Precio</button>
+                                                          </button><button class="btn btn-warning btn-lg botonera boton_edicion">Edición Registro</button>
                                                           </button><button class="btn btn-danger btn-lg botonera boton_baja">Borrar Registro</button>
                                                           `)));
-                        //$linea.append($('<button id="baja" class="btn btn-danger btn-lg botonera"> Baja </button>'));
+        
                         $padre.append($linea);
 
                     });
@@ -127,7 +126,7 @@ $(document).ready(function () {
     });
 
     // Habilita los controles para el cambio de precio
-    $('#listado').on("click", ".boton_precio", function (event) {
+    $('#listado').on("click", ".boton_edicion", function (event) {
         event.preventDefault(); // Prevent default behavior
 
         let $row = $(this).closest('tr');
@@ -136,28 +135,30 @@ $(document).ready(function () {
         let prodDescripcion = $row.find('td').eq(2).text();
         let prodPrecio = $row.find('td').eq(4).text();
 
-        let $precio = $("#cambio_precio");
+        let $precio = $("#edicion");
         $precio.show();
         $("nuevo").hide();
 
-        $("#id_cambio_precio").val(prodId);
-        $("#nombre_cambio_precio").val(prodNombre);
-        $("#descripcion_cambio_precio").val(prodDescripcion);
-        $("#precio_cambio_precio").val(prodPrecio);
+        $("#id_edicion").val(prodId);
+        $("#nombre_edicion").val(prodNombre);
+        $("#descripcion_edicion").val(prodDescripcion);
+        $("#precio_edicion").val(prodPrecio);
 
 
     });
 
     // Graba el cambio de precio enviando petición al servidor.
-    $("#boton_graba_cambio_precio").on("click", function () {
+    $("#boton_graba_edicion").on("click", function () {
 
-        let $precio = $("#cambio_precio");
-        let prodId = $("#id_cambio_precio").val();
-        let prodPrecio = $("#precio_cambio_precio").val();
+        let $precio = $("#edicion");
+        let prodId = $("#id_edicion").val();
+        let prodNombre = $("#nombre_edicion").val();
+        let prodDescripcion = $("#descripcion_edicion").val();
+        let prodPrecio = $("#precio_edicion").val();
 
-        let envio = { id: prodId, precio: prodPrecio };
+        let envio = { id: prodId, precio: prodPrecio, nombre: prodNombre, descripcion: prodDescripcion, cantidad:0 };
         $.ajax({
-            url: 'http://localhost:1234/api/productos/precio',
+            url: 'http://localhost:1234/api/productos/edicion',
             method: "PUT",
             contentType: "application/json",
             data: JSON.stringify(envio),
