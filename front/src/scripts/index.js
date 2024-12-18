@@ -30,8 +30,9 @@ $(document).ready(function () {
                         $linea.append($('<td class="renglon mt-3md-3">').text(x.precio));
                         //$linea.append($('<button id="boton_detalle" class="btn btn-info btn-lg botonera">Detalle</button>'));
                         $linea.append($('<td>').append($(`<button class="btn btn-success btn-lg botonera boton_compra">Compra
-                                                          </button><button class="btn btn-warning btn-lg botonera boton_reposicion">Reposicion</button>
-                                                          </button><button class="btn btn-danger btn-lg botonera boton_precio">Cambio Precio</button>
+                                                          </button><button class="btn btn-info btn-lg botonera boton_reposicion">Reposicion</button>
+                                                          </button><button class="btn btn-warning btn-lg botonera boton_precio">Cambio Precio</button>
+                                                          </button><button class="btn btn-danger btn-lg botonera boton_baja">Borrar Registro</button>
                                                           `)));
                         //$linea.append($('<button id="baja" class="btn btn-danger btn-lg botonera"> Baja </button>'));
                         $padre.append($linea);
@@ -125,6 +126,7 @@ $(document).ready(function () {
 
     });
 
+    // Habilita los controles para el cambio de precio
     $('#listado').on("click", ".boton_precio", function (event) {
         event.preventDefault(); // Prevent default behavior
 
@@ -143,30 +145,63 @@ $(document).ready(function () {
         $("#descripcion_cambio_precio").val(prodDescripcion);
         $("#precio_cambio_precio").val(prodPrecio);
 
-        $("#boton_graba_cambio_precio").on("click", function () {
-            let envio = { id: prodId, precio: $("#precio_cambio_precio").val() };
-            $.ajax({
-                url: 'http://localhost:1234/api/productos/precio',
-                method: "PUT",
-                contentType: "application/json",
-                data: JSON.stringify(envio),
-                success: function (result) {
-                    console.log('Respuesta: ' + result);
-                    $precio.hide();
-                    refrescarListado();
-                },
-                error: function (xhr, status, error) {
-                    console.log('Error: ' + error);
-                }
-            });
-        });
 
-        $("#boton_cancela_precio").on("click", function (event) {
-            event.preventDefault();
-            $precio.hide();
+    });
+    $("#boton_graba_cambio_precio").on("click", function () {
+        let envio = { id: prodId, precio: $("#precio_cambio_precio").val() };
+        $.ajax({
+            url: 'http://localhost:1234/api/productos/precio',
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(envio),
+            success: function (result) {
+                console.log('Respuesta: ' + result);
+                $precio.hide();
+                refrescarListado();
+            },
+            error: function (xhr, status, error) {
+                console.log('Error: ' + error);
+            }
         });
     });
 
+    $("#boton_cancela_precio").on("click", function (event) {
+        event.preventDefault();
+        $precio.hide();
+    });
+
+
+    // Dar de baja un producto. 
+    $('#listado').on("click", ".boton_baja", function (event) {
+
+        event.preventDefault() // Esto o si no, al menos en Brave, cuelga por razòn no informada en inspector y debugguer. 
+
+        let $row = $(this).closest('tr');
+        let solId = $row.find('td').eq(0).text();
+
+        console.log("Id es: " + solId);
+
+        $.ajax({
+            url: 'http://localhost:1234/api/productos/' + solId,
+            method: "DELETE",
+            contentType: "application/json",
+            success: function (result) {
+
+                console.log("resultado de la compra: " + result)
+
+            },
+            error: function (xhr, status, error) {
+
+                console.log("resultado de la compra: " + error)
+
+            }
+        });
+
+        refrescarListado();
+
+    });
+
+    // Muestra los controles de detalle para la carga de datos del registro a dar de alta. 
     $("#boton_nuevo").on("click", function (event) {
         event.preventDefault();
         let $nuevo = $("#nuevo")
@@ -174,6 +209,8 @@ $(document).ready(function () {
         $("#cambioprecio").hide();
     });
 
+
+    // Graba los datos del registro a dar de alta. 
     $("#boton_graba_nuevo").on("click", function (event) {
         event.preventDefault();
 
