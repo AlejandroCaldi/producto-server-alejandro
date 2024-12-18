@@ -134,8 +134,9 @@ $(document).ready(function () {
         let prodDescripcion = $row.find('td').eq(2).text();
         let prodPrecio = $row.find('td').eq(4).text();
 
-        let $precio = $("#cambio_precio"); 
+        let $precio = $("#cambio_precio");
         $precio.show();
+        $("nuevo").hide();
 
         $("#id_cambio_precio").val(prodId);
         $("#nombre_cambio_precio").val(prodNombre);
@@ -168,46 +169,49 @@ $(document).ready(function () {
 
     $("#boton_nuevo").on("click", function (event) {
         event.preventDefault();
-        let $nuevo =  $("#nuevo")
+        let $nuevo = $("#nuevo")
         $nuevo.show();
+        $("#cambioprecio").hide();
+    });
 
-        $("#boton_graba_nuevo").on("click", function () {
-            event.preventDefault();
+    $("#boton_graba_nuevo").on("click", function (event) {
+        event.preventDefault();
 
-            let nombre_nuevo =  $("#nombre_nuevo").val();
-            let descripcion_nuevo = $('#descripcion_nuevo').val();
-            let cantidad_nuevo =  $('#cantidad_nuevo').val();
-            let precio_nuevo = $("#precio_nuevo").val();
+        let nombre_nuevo = $("#nombre_nuevo").val();
+        let descripcion_nuevo = $('#descripcion_nuevo').val();
+        let cantidad_nuevo = $('#cantidad_nuevo').val();
+        let precio_nuevo = $("#precio_nuevo").val();
 
-            let envio = { id: 0, 
-                          nombre: nombre_nuevo,
-                          descripcion: descripcion_nuevo,
-                          cantidad:cantidad_nuevo,  
-                          precio: precio_nuevo };
+        let envio = {
+            id: 0,
+            nombre: nombre_nuevo,
+            descripcion: descripcion_nuevo,
+            cantidad: cantidad_nuevo,
+            precio: precio_nuevo
+        };
 
-            console.log(JSON.stringify(envio)); 
+        console.log(JSON.stringify(envio));
 
-            $.ajax({
-                url: 'https://localhost:1234/api/productos', // Adjusted by Parcel to remove "/api"
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(envio), 
-                success: function (result) {
-                    console.log('Respuesta: ' + result);
-                    // $precio.hide();
-                    // refrescarListado();
-                },
-                error: function (xhr, status, error, envio) {
-                    console.log('Error: ' + error + " . El envío era:" + JSON.stringify(envio));
-                }
-            });
-        });
-
-        $("#boton_cancela_nuevo").on("click", function (event) {
-            event.preventDefault();
-            $precio.hide();
+        $.ajax({
+            url: 'http://localhost:1234/api/productos/alta', // Adjusted by Parcel to remove "/api"
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(envio),
+            success: function (result) {
+                console.log('Respuesta: ' + result);
+                refrescarListado();
+            },
+            error: function (xhr, status, error, envio) {
+                console.log('Error: ' + error + " . El envío era:" + JSON.stringify(envio));
+            }
         });
     });
+
+    $("#boton_cancela_nuevo").on("click", function (event) {
+        event.preventDefault();
+        refrescarListado();
+    });
+
 
 
 });
