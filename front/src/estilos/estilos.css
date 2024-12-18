@@ -26,4 +26,12 @@ body{
     margin: 2px;
 }
 
-
+table-bordered {
+    border: 1px solid #585858;
+  }
+  .table-bordered td, .table-bordered th {
+    border-left: 1px solid #585858;
+  }
+  .table-bordered td:first-child, .table-bordered th:first-child {
+    border-left: 0;
+  }

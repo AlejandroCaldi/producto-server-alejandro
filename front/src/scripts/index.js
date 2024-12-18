@@ -26,8 +26,8 @@ $(document).ready(function () {
                         $linea.append($('<td class="renglon mt-3 md-3" style=display:none>').text(x.id));
                         $linea.append($('<td class="renglon mt-3 md-3">').text(x.nombre));
                         $linea.append($('<td class="renglon mt-3md-3">').text(x.descripcion));
-                        $linea.append($('<td class="renglon mt-3md-3">').text(x.cantidad));
-                        $linea.append($('<td class="renglon mt-3md-3">').text(x.precio));
+                        $linea.append($('<td class="renglon mt-3md-3 text-right">').text(x.cantidad));
+                        $linea.append($('<td class="renglon mt-3md-3 text-right">').text(x.precio));
                         //$linea.append($('<button id="boton_detalle" class="btn btn-info btn-lg botonera">Detalle</button>'));
                         $linea.append($('<td>').append($(`<button class="btn btn-success btn-lg botonera boton_compra">Compra
                                                           </button><button class="btn btn-info btn-lg botonera boton_reposicion">Reposicion</button>
