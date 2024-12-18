@@ -147,8 +147,15 @@ $(document).ready(function () {
 
 
     });
+
+
     $("#boton_graba_cambio_precio").on("click", function () {
-        let envio = { id: prodId, precio: $("#precio_cambio_precio").val() };
+
+        let $precio = $("#cambio_precio");
+        let prodId = $("#id_cambio_precio").val();
+        let prodPrecio = $("#precio_cambio_precio").val();
+
+        let envio = { id: prodId, precio: prodPrecio };
         $.ajax({
             url: 'http://localhost:1234/api/productos/precio',
             method: "PUT",
