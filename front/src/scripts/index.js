@@ -174,9 +174,10 @@ $(document).ready(function () {
     });
 
     // Cancela operación de cambio de precio. Borra el detalle y refresca el maestro. 
-    $("#boton_cancela_precio").on("click", function (event) {
+    $("#boton_cancela_edicion").on("click", function (event) {
         event.preventDefault();
-        $precio.hide();
+        $edicion = $("#edicion")
+        $edicion.hide();
     });
 
 
