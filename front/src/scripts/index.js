@@ -240,7 +240,7 @@ $(document).ready(function () {
         event.preventDefault();
         let $nuevo = $("#nuevo")
         $nuevo.show();
-        $("#cambioprecio").hide();
+        $("#edicion").hide();
     });
 
 
