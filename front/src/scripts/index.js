@@ -148,7 +148,7 @@ $(document).ready(function () {
 
     });
 
-
+    // Graba el cambio de precio enviando petición al servidor.
     $("#boton_graba_cambio_precio").on("click", function () {
 
         let $precio = $("#cambio_precio");
@@ -172,6 +172,7 @@ $(document).ready(function () {
         });
     });
 
+    // Cancela operación de cambio de precio. Borra el detalle y refresca el maestro. 
     $("#boton_cancela_precio").on("click", function (event) {
         event.preventDefault();
         $precio.hide();
@@ -181,32 +182,38 @@ $(document).ready(function () {
     // Dar de baja un producto. 
     $('#listado').on("click", ".boton_baja", function (event) {
 
-        event.preventDefault() // Esto o si no, al menos en Brave, cuelga por razòn no informada en inspector y debugguer. 
+        event.preventDefault()
 
         let $row = $(this).closest('tr');
         let solId = $row.find('td').eq(0).text();
 
         console.log("Id es: " + solId);
 
-        $.ajax({
-            url: 'http://localhost:1234/api/productos/' + solId,
-            method: "DELETE",
-            contentType: "application/json",
-            success: function (result) {
+        if (confirm("Está seguro de que desea BORRAR este registro?")) {
+            $.ajax({
+                url: 'http://localhost:1234/api/productos/' + solId,
+                method: "DELETE",
+                contentType: "application/json",
+                success: function (result) {
 
-                console.log("resultado de la compra: " + result)
+                    console.log("resultado de la compra: " + result)
 
-            },
-            error: function (xhr, status, error) {
+                },
+                error: function (xhr, status, error) {
 
-                console.log("resultado de la compra: " + error)
+                    console.log("resultado de la compra: " + error)
 
-            }
-        });
+                }
+            });
+        } else {
+            // If the user clicked "Cancel", do nothing
+            console.log("Operación de borrado cancelada.");
+        }
 
         refrescarListado();
 
     });
+
 
     // Muestra los controles de detalle para la carga de datos del registro a dar de alta. 
     $("#boton_nuevo").on("click", function (event) {
