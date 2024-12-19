@@ -146,7 +146,7 @@ public class ProductoControllerIntegrationTest {
                 // Como el endpoint de compra recibe un json nivelable con Producto, pero solo
                 // con los datos necesarios para hacer la operación
                 // entonvces creo un objecto Producto ad-hoc para emular la situacion
-                Producto compraRequest = new Producto(2, "Producto B", "", 0, 5);
+                Producto compraRequest = new Producto(1, "Producto B", "", 0, 5);
 
                 // Intentar comprar el producto (debe devolver BadRequest debido a que no hay
                 // stock)
@@ -156,7 +156,7 @@ public class ProductoControllerIntegrationTest {
                                 .content(objectMapper.writeValueAsString(compraRequest)))
                                 .andExpect(status().isOk());
 
-                compraRequest = new Producto(1, "Producto A", "", 0, 6);
+                compraRequest = new Producto(2, "Producto A", "", 0, 6);
 
                 mockMvc.perform(MockMvcRequestBuilders.post("/productos/compra")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -166,6 +166,23 @@ public class ProductoControllerIntegrationTest {
                 mockMvc.perform(MockMvcRequestBuilders.get("/productos/1"))
                                 .andExpect(status().isOk())
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.cantidad").value(5));
+        }
+
+        @Test
+        void testComprarProductoTesteaExistencia() throws Exception {
+
+                // Como el endpoint de compra recibe un json nivelable con Producto, pero solo
+                // con los datos necesarios para hacer la operación
+                // entonvces creo un objecto Producto ad-hoc para emular la situacion
+                Producto compraRequest = new Producto(8, "Producto M", "", 0, 5);
+
+                // Intentar comprar el producto (debe devolver isNotFound porque el producto no existe.
+
+                mockMvc.perform(MockMvcRequestBuilders.post("/productos/compra")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(compraRequest)))
+                                .andExpect(status().isNotFound());
+
         }
 
         @Test
@@ -188,18 +205,13 @@ public class ProductoControllerIntegrationTest {
 
         @Test
         void testEliminarProducto() throws Exception {
-                // Crear el producto
-                mockMvc.perform(MockMvcRequestBuilders.post("/productos/alta")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(producto3)))
-                                .andExpect(status().isCreated());
 
                 // Eliminar el producto
-                mockMvc.perform(MockMvcRequestBuilders.delete("/productos/3"))
+                mockMvc.perform(MockMvcRequestBuilders.delete("/productos/1"))
                                 .andExpect(status().isNoContent());
 
                 // Verificar que el producto ya no existe
-                mockMvc.perform(MockMvcRequestBuilders.get("/productos/3"))
+                mockMvc.perform(MockMvcRequestBuilders.get("/productos/1"))
                                 .andExpect(status().isNotFound());
         }
 }
