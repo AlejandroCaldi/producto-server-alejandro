@@ -15,8 +15,5 @@ npm install jquery-validation
 Cambios a realizar:
 
 
-Nombres de botón resumidos
-Decimales al precio. 
-Manejo de inventario precisa sacar redundancia.
 
-Chequeo final de los controles de campos vacíos. 
+Se van la spalabras maestro y detalle del html. 
