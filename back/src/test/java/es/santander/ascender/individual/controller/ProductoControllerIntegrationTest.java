@@ -53,6 +53,9 @@ public class ProductoControllerIntegrationTest {
                 productoController.getProductos().put(2l, producto2);
         }
 
+        /**
+         * Test de creación de producto. 
+         */
         @Test
         void testCrearProducto() throws Exception {
                 mockMvc.perform(MockMvcRequestBuilders.post("/productos/alta")
@@ -61,6 +64,9 @@ public class ProductoControllerIntegrationTest {
                                 .andExpect(status().isCreated());
         }
 
+        /**
+         * Test de alta de producto ya existente. 
+         */
         @Test
         void testCrearProductoExistente() throws Exception {
                 // Crear el producto y luego intentar crear uno con el mismo nombre
@@ -76,6 +82,9 @@ public class ProductoControllerIntegrationTest {
                                 .andExpect(status().isBadRequest());
         }
 
+        /**
+         * Test de pedido de toda la lista de producto. 
+         */
         @Test
         void testObtenerProductoLista() throws Exception {
 
@@ -87,6 +96,9 @@ public class ProductoControllerIntegrationTest {
         }
 
 
+        /**
+         * Testeo desolicitud de producto individual. 
+         */
         @Test
         void testObtenerProductoIndividual() throws Exception {
 
@@ -97,12 +109,20 @@ public class ProductoControllerIntegrationTest {
         }
 
 
+        
+        /**
+         * Test para solicitud de producto no existente. 
+         * @throws Exception
+         */
         @Test
         void testObtenerProductoNoExistente() throws Exception {
                 mockMvc.perform(MockMvcRequestBuilders.get("/productos/999"))
                                 .andExpect(status().isNotFound());
         }
 
+        /**
+         * Test de reposición de stock en caso de existencia del material / producto. . 
+         */
         @Test
         void testReponerStock() throws Exception {
 
@@ -124,6 +144,10 @@ public class ProductoControllerIntegrationTest {
 
         }
 
+        
+        /**
+         * Test de existencia de material / producto en caso de reposición. 
+         */
         @Test
         void testReponerStockNoExisteItem() throws Exception {
 
@@ -140,6 +164,9 @@ public class ProductoControllerIntegrationTest {
         }
         
 
+        /**
+         * Test de Compra de producto con testeo de stock (existe el material / producto)
+         */
         @Test
         void testComprarProductoTesteaStock() throws Exception {
 
@@ -168,6 +195,11 @@ public class ProductoControllerIntegrationTest {
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.cantidad").value(5));
         }
 
+
+        
+        /**
+         * Test de existencia del material / producto en caso de compra
+         */
         @Test
         void testComprarProductoTesteaExistencia() throws Exception {
 
@@ -185,6 +217,9 @@ public class ProductoControllerIntegrationTest {
 
         }
 
+        /**
+         * Test de ediciòn de las propiedades de material / producto. 
+         */
         @Test
         void testEditarProducto() throws Exception {
 
@@ -203,6 +238,9 @@ public class ProductoControllerIntegrationTest {
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.precio").value(120.0));
         }
 
+        /**
+         * Test de eliminación de producto. 
+         */
         @Test
         void testEliminarProducto() throws Exception {
 
