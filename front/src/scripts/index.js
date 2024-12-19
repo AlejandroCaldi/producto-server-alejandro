@@ -318,6 +318,7 @@ $(document).ready(function () {
                 },
                 error: function (xhr, status, error, envio) {
                     console.log('Error: ' + error + " . El envío era:" + JSON.stringify(envio));
+                    alert(xhr.responseText);
                 }
             });
 

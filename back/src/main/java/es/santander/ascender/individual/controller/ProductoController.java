@@ -46,8 +46,9 @@ public class ProductoController {
     }
 
     @PostMapping("/alta")
-    public ResponseEntity<Producto> create(@RequestBody Producto producto) {
+    public ResponseEntity<?> create(@RequestBody Producto producto) {
         long cuenta = productos.values().size();
+        String nombreNuevo = producto.getNombre();
         
         long maxId = 0;
         if (cuenta != 0) {
@@ -56,7 +57,14 @@ public class ProductoController {
                                 .mapToLong(id -> id)
                                 .max()
                                 .orElse(0);
+        } 
+
+        for (Producto product : productos.values()) {
+            if (product.getNombre().equals(nombreNuevo)) {
+                return ResponseEntity.badRequest().body("Producto '" + nombreNuevo + "' ya existente en el inventario.");
+            }
         }
+
         producto.setId(maxId + 1);
 
         productos.put(producto.getId(), producto);
@@ -126,7 +134,6 @@ public class ProductoController {
             return ResponseEntity.notFound().build();
         }
 
-
         producto.setCantidad(producto.getCantidad() + cantidadRepuesta);
 
         return ResponseEntity.ok("Reposición realizada con éxito. Producto: " + producto.getNombre());
@@ -135,7 +142,7 @@ public class ProductoController {
 
 
     @PutMapping("/edicion")
-    public ResponseEntity<String> cambiarPrecio(@RequestBody Producto productoEditado) {
+    public ResponseEntity<String> editarProducto(@RequestBody Producto productoEditado) {
         long id = productoEditado.getId();
         float nuevoPrecio = productoEditado.getPrecio();
         String nuevoNombre = productoEditado.getNombre();
