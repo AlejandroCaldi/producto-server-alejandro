@@ -11,9 +11,3 @@ npm install bootstrap@3.4.1
 npm install jquery-validation
 
 ´´´
-
-Cambios a realizar:
-
-
-
-Se van la spalabras maestro y detalle del html. 
