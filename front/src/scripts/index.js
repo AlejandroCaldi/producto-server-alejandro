@@ -334,6 +334,13 @@ $(document).ready(function () {
         refrescarListado();
     });
 
+    //Para el fintrado de la tabla. 
+    $("#filtrado").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#listado tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
 
 
 });
