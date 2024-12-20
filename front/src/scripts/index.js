@@ -5,6 +5,8 @@ let operacion_compraventa = 0; // 0 equivale a compra, 1 a reposición
 
 $(document).ready(function () {
 
+
+    // Borra y recarga abl con el maestro del inventario. 
     function refrescarListado() {
 
         $.get("http://my-json-server.typicode.com/desarrollo-seguro/dato/solicitudes",
@@ -39,13 +41,10 @@ $(document).ready(function () {
 
                     });
 
+                    escondeDetalles();
                     $maestro.show();
                     $padre.show();
-                    $("nuevo").hide();
-                    $("cambioprecio").hide();
-                    $("compraventa").hide();
-                    $("compraventa").hide();
-                    console.log("Refrescaso de tabla ejecutado");
+                    
                     console.log(articulos);
 
                 }).fail(function () {
@@ -61,60 +60,81 @@ $(document).ready(function () {
     };
 
 
+    /* Función de vuelco de valores en funcciójn de en qué renglón se presiona un botón dado. 
+    * Implementado para Compras y Reposición. Edición es distinto. 
+    * @param event: El evento del click en el renglón especñifico de la trabla. Si no, no lo hereda. 
+    * @param texto: El String con el que se desea rellenar el <legend> de compra_venta.
+    **/ 
+    function vuelcoValores (event, texto)  {
+
+        if (event) event.preventDefault();
+
+        let $row = $(event.target).closest('tr');
+        let prodId = $row.find('td').eq(0).text();
+        let prodNombre = $row.find('td').eq(1).text();
+        let prodCantidad = $row.find('td').eq(3).text();
+
+        $("#legend_compraventa").text(texto);
+        $("#id_compraventa").val(prodId);
+        $("#nombre_compraventa").val(prodNombre);
+        $("#nombre_compraventa").prop('disabled', true);
+        $("#cantidad_compraventa").val(prodCantidad);
+        escondeDetalles();
+        $("#compraventa").show();
+
+        window.vuelcoValores = vuelcoValores;
+
+    }
+
+    //Esconde todos los detalles. Llamada por todos los procesos de invocado de detalle para luego solo llamar
+    //el que interesa a la operación. 
+    function escondeDetalles() {
+
+        $("#edicion").hide();
+        $("#nuevo").hide();
+        $("#compraventa").hide();
+
+        window.escondeDetalles = escondeDetalles;
+
+    }
+
     refrescarListado();
 
+    // Refresca el detalle
     $("#boton_lista").on("click", function (event) {
         event.preventDefault();
         refrescarListado();
 
     });
 
+
+    // Definiciones de eventos. (Clicks)
+
+
+
     $(document).ready(function() {
+
+        // Accionar tras botón de compra
         $('#listado').on("click", ".boton_compra", function(event) {
-            event.preventDefault(); // Prevent default action
-    
-            let $row = $(this).closest('tr');
-            let prodId = $row.find('td').eq(0).text();
-            let prodNombre = $row.find('td').eq(1).text();
-            let prodCantidad = $row.find('td').eq(3).text();
-    
+            event.preventDefault();
             operacion_compraventa = 0;
-    
-            $("#legend_compraventa").text("Compra");
-            $("#id_compraventa").val(prodId);
-            $("#nombre_compraventa").val(prodNombre);
-            $("#nombre_compraventa").prop('disabled', true);
-            $("#cantidad_compraventa").val(prodCantidad);
-            $("#nuevo").hide();
-            $("#edicion").hide();
-            $("#compraventa").show(); // Corrected selector
+            vuelcoValores(event, "Compra") 
+           
         });
     
+        // Accionar de clinck del botón de reposición. 
         $('#listado').on("click", ".boton_reposicion", function(event) {
-            event.preventDefault(); // Prevent default action
-    
-            let $row = $(this).closest('tr');
-            let prodId = $row.find('td').eq(0).text();
-            let prodNombre = $row.find('td').eq(1).text();
-            let prodCantidad = $row.find('td').eq(3).text();
-    
+            event.preventDefault(); 
             operacion_compraventa = 1;
-    
-            $("#legend_compraventa").text("Reposición");
-            $("#id_compraventa").val(prodId);
-            $("#nombre_compraventa").val(prodNombre);
-            $("#nombre_compraventa").prop('disabled', true);
-            $("#cantidad_compraventa").val(prodCantidad);
-            $("#nuevo").hide();
-            $("#edicion").hide();
-            $("#compraventa").show(); // Corrected selector
+            vuelcoValores(event, "Reposición") 
         });
     
+        // Acckonar del botón de grabación sea de reposición o venta. 
         $("#boton_graba_compraventa").on("click", function(event) {
-            event.preventDefault(); // Prevent default action
+            event.preventDefault();
             
             let prodId = $("#id_compraventa").val();
-            let prodCantidad = $("#cantidad_compraventa").val(); // Corrected variable name
+            let prodCantidad = $("#cantidad_compraventa").val(); 
     
             let envio = { id: prodId, precio: 0, nombre: "", descripcion: "", cantidad: prodCantidad };
     
@@ -156,9 +176,7 @@ $(document).ready(function () {
     // Cancela operación de cambio de precio. Borra el detalle y refresca el maestro. 
     $("#boton_cancela_compraventa").on("click", function (event) {
         event.preventDefault();
-        $("#edicion").hide();
-        $("#nuevo").hide();
-        $("#compraventa").hide();
+        escondeDetalles();
     });
 
 
@@ -173,9 +191,8 @@ $(document).ready(function () {
         let prodCantidad = $row.find('td').eq(3).text();
         let prodPrecio = $row.find('td').eq(4).text();
 
-        let $precio = $("#edicion");
-        $precio.show();
-        $("nuevo").hide();
+        escondeDetalles();
+        let $precio = $("#edicion").show();
 
         $("#id_edicion").val(prodId);
         $("#nombre_edicion").val(prodNombre);
@@ -232,8 +249,7 @@ $(document).ready(function () {
     // Cancela operación de cambio de precio. Borra el detalle y refresca el maestro. 
     $("#boton_cancela_edicion").on("click", function (event) {
         event.preventDefault();
-        $("#edicion").hide();
-        $("compraventa").hide();
+        escondeDetalles();
     });
 
 
@@ -276,10 +292,9 @@ $(document).ready(function () {
     // Muestra los controles de detalle para la carga de datos del registro a dar de alta. 
     $("#boton_nuevo").on("click", function (event) {
         event.preventDefault();
-        let $nuevo = $("#nuevo")
-        $nuevo.show();
-        $("#edicion").hide();
-        $("compraventa").hide();
+        escondeDetalles();
+         $("#nuevo").show();
+       
     });
 
 
@@ -324,11 +339,12 @@ $(document).ready(function () {
 
         } else {
 
-            alert("Tods los campos deben ser completados.");
+            alert("Todos los campos deben ser completados.");
 
         }
     });
 
+    // Accionar del botón de Cancelar de la creaciñon de nuevo registro. 
     $("#boton_cancela_nuevo").on("click", function (event) {
         event.preventDefault();
         refrescarListado();

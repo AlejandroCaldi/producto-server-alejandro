@@ -53,6 +53,9 @@ public class ProductoControllerIntegrationTest {
                 productoController.getProductos().put(2l, producto2);
         }
 
+        /**
+         * Test de creación de producto. 
+         */
         @Test
         void testCrearProducto() throws Exception {
                 mockMvc.perform(MockMvcRequestBuilders.post("/productos/alta")
@@ -61,6 +64,9 @@ public class ProductoControllerIntegrationTest {
                                 .andExpect(status().isCreated());
         }
 
+        /**
+         * Test de alta de producto ya existente. 
+         */
         @Test
         void testCrearProductoExistente() throws Exception {
                 // Crear el producto y luego intentar crear uno con el mismo nombre
@@ -76,6 +82,9 @@ public class ProductoControllerIntegrationTest {
                                 .andExpect(status().isBadRequest());
         }
 
+        /**
+         * Test de pedido de toda la lista de producto. 
+         */
         @Test
         void testObtenerProductoLista() throws Exception {
 
@@ -87,6 +96,9 @@ public class ProductoControllerIntegrationTest {
         }
 
 
+        /**
+         * Testeo desolicitud de producto individual. 
+         */
         @Test
         void testObtenerProductoIndividual() throws Exception {
 
@@ -97,12 +109,20 @@ public class ProductoControllerIntegrationTest {
         }
 
 
+        
+        /**
+         * Test para solicitud de producto no existente. 
+         * @throws Exception
+         */
         @Test
         void testObtenerProductoNoExistente() throws Exception {
                 mockMvc.perform(MockMvcRequestBuilders.get("/productos/999"))
                                 .andExpect(status().isNotFound());
         }
 
+        /**
+         * Test de reposición de stock en caso de existencia del material / producto. . 
+         */
         @Test
         void testReponerStock() throws Exception {
 
@@ -124,6 +144,10 @@ public class ProductoControllerIntegrationTest {
 
         }
 
+        
+        /**
+         * Test de existencia de material / producto en caso de reposición. 
+         */
         @Test
         void testReponerStockNoExisteItem() throws Exception {
 
@@ -140,13 +164,16 @@ public class ProductoControllerIntegrationTest {
         }
         
 
+        /**
+         * Test de Compra de producto con testeo de stock (existe el material / producto)
+         */
         @Test
         void testComprarProductoTesteaStock() throws Exception {
 
                 // Como el endpoint de compra recibe un json nivelable con Producto, pero solo
                 // con los datos necesarios para hacer la operación
                 // entonvces creo un objecto Producto ad-hoc para emular la situacion
-                Producto compraRequest = new Producto(2, "Producto B", "", 0, 5);
+                Producto compraRequest = new Producto(1, "Producto B", "", 0, 5);
 
                 // Intentar comprar el producto (debe devolver BadRequest debido a que no hay
                 // stock)
@@ -156,7 +183,7 @@ public class ProductoControllerIntegrationTest {
                                 .content(objectMapper.writeValueAsString(compraRequest)))
                                 .andExpect(status().isOk());
 
-                compraRequest = new Producto(1, "Producto A", "", 0, 6);
+                compraRequest = new Producto(2, "Producto A", "", 0, 6);
 
                 mockMvc.perform(MockMvcRequestBuilders.post("/productos/compra")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -168,6 +195,31 @@ public class ProductoControllerIntegrationTest {
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.cantidad").value(5));
         }
 
+
+        
+        /**
+         * Test de existencia del material / producto en caso de compra
+         */
+        @Test
+        void testComprarProductoTesteaExistencia() throws Exception {
+
+                // Como el endpoint de compra recibe un json nivelable con Producto, pero solo
+                // con los datos necesarios para hacer la operación
+                // entonvces creo un objecto Producto ad-hoc para emular la situacion
+                Producto compraRequest = new Producto(8, "Producto M", "", 0, 5);
+
+                // Intentar comprar el producto (debe devolver isNotFound porque el producto no existe.
+
+                mockMvc.perform(MockMvcRequestBuilders.post("/productos/compra")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(compraRequest)))
+                                .andExpect(status().isNotFound());
+
+        }
+
+        /**
+         * Test de ediciòn de las propiedades de material / producto. 
+         */
         @Test
         void testEditarProducto() throws Exception {
 
@@ -186,20 +238,18 @@ public class ProductoControllerIntegrationTest {
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.precio").value(120.0));
         }
 
+        /**
+         * Test de eliminación de producto. 
+         */
         @Test
         void testEliminarProducto() throws Exception {
-                // Crear el producto
-                mockMvc.perform(MockMvcRequestBuilders.post("/productos/alta")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(producto3)))
-                                .andExpect(status().isCreated());
 
                 // Eliminar el producto
-                mockMvc.perform(MockMvcRequestBuilders.delete("/productos/3"))
+                mockMvc.perform(MockMvcRequestBuilders.delete("/productos/1"))
                                 .andExpect(status().isNoContent());
 
                 // Verificar que el producto ya no existe
-                mockMvc.perform(MockMvcRequestBuilders.get("/productos/3"))
+                mockMvc.perform(MockMvcRequestBuilders.get("/productos/1"))
                                 .andExpect(status().isNotFound());
         }
 }
