@@ -44,7 +44,7 @@ $(document).ready(function () {
                     escondeDetalles();
                     $maestro.show();
                     $padre.show();
-                    
+
                     console.log(articulos);
 
                 }).fail(function () {
@@ -64,8 +64,8 @@ $(document).ready(function () {
     * Implementado para Compras y Reposición. Edición es distinto. 
     * @param event: El evento del click en el renglón especñifico de la trabla. Si no, no lo hereda. 
     * @param texto: El String con el que se desea rellenar el <legend> de compra_venta.
-    **/ 
-    function vuelcoValores (event, texto)  {
+    **/
+    function vuelcoValores(event, texto) {
 
         if (event) event.preventDefault();
 
@@ -110,63 +110,63 @@ $(document).ready(function () {
 
     // Definiciones de eventos. (Clicks)
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         // Accionar tras botón de compra
-        $('#listado').on("click", ".boton_compra", function(event) {
+        $('#listado').on("click", ".boton_compra", function (event) {
             event.preventDefault();
             operacion_compraventa = 0;
-            vuelcoValores(event, "Compra") 
-           
+            vuelcoValores(event, "Compra")
+
         });
-    
+
         // Accionar de clinck del botón de reposición. 
-        $('#listado').on("click", ".boton_reposicion", function(event) {
-            event.preventDefault(); 
-            operacion_compraventa = 1;
-            vuelcoValores(event, "Reposición") 
-        });
-    
-        // Acckonar del botón de grabación sea de reposición o venta. 
-        $("#boton_graba_compraventa").on("click", function(event) {
+        $('#listado').on("click", ".boton_reposicion", function (event) {
             event.preventDefault();
-            
+            operacion_compraventa = 1;
+            vuelcoValores(event, "Reposición")
+        });
+
+        // Acckonar del botón de grabación sea de reposición o venta. 
+        $("#boton_graba_compraventa").on("click", function (event) {
+            event.preventDefault();
+
             let prodId = $("#id_compraventa").val();
-            let prodCantidad = $("#cantidad_compraventa").val(); 
-    
+            let prodCantidad = $("#cantidad_compraventa").val();
+
             let envio = { id: prodId, precio: 0, nombre: "", descripcion: "", cantidad: prodCantidad };
-    
+
             if (operacion_compraventa == 0) {
                 $.ajax({
                     url: 'http://localhost:1234/api/productos/compra',
                     method: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(envio),
-                    success: function(result) {
+                    success: function (result) {
                         console.log("resultado de la compra: " + result);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.log("resultado de la compra: " + error);
                         alert("La compra excedería la cantidad en inventario");
                     }
                 });
             }
-    
+
             if (operacion_compraventa == 1) {
                 $.ajax({
                     url: 'http://localhost:1234/api/productos/reposicion',
                     method: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(envio),
-                    success: function(result) {
+                    success: function (result) {
                         console.log("resultado de la reposición: " + result);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.log("resultado de la reposición: " + error);
                     }
                 });
             }
-    
+
             refrescarListado(); // Make sure this function doesn't cause a page reload
         });
     });
@@ -180,7 +180,7 @@ $(document).ready(function () {
 
     // Habilita los controles para el cambio de precio
     $('#listado').on("click", ".boton_edicion", function (event) {
-        event.preventDefault(); 
+        event.preventDefault();
 
         let $row = $(this).closest('tr');
         let prodId = $row.find('td').eq(0).text();
@@ -213,7 +213,9 @@ $(document).ready(function () {
         let prodCantidad = Number($("#cantidad_edicion").val());
 
         if (prodNombre.length > 0 &&
-            prodDescripcion.length > 0) {
+            prodDescripcion.length > 0 &&
+            prodPrecio > 0 &&
+            prodCantidad >= 0) {
 
 
             let envio = { id: prodId, precio: prodPrecio, nombre: prodNombre, descripcion: prodDescripcion, cantidad: prodCantidad };
@@ -233,13 +235,15 @@ $(document).ready(function () {
             });
         } else {
 
-            alert("Complete Todos los campos");
+            if (prodNombre.length == 0 ||
+                prodDescripcion.length == 0) {
 
-            $("#id_edicion").val();
-            $("#nombre_edicion").val();
-            $("#descripcion_edicion").val();
-            $("#cantidad_edicion").val();
-            $("#precio_edicion").val();
+                alert("Todos los campos deben ser completados. Can");
+
+            } else {
+
+                alert("Precio no puede ser 0 o menor. La cantidad no puede ser negativa.")
+            }
 
         }
     });
@@ -291,8 +295,8 @@ $(document).ready(function () {
     $("#boton_nuevo").on("click", function (event) {
         event.preventDefault();
         escondeDetalles();
-         $("#nuevo").show();
-       
+        $("#nuevo").show();
+
     });
 
 
@@ -308,7 +312,9 @@ $(document).ready(function () {
         if (nombre_nuevo != "" &&
             descripcion_nuevo != "" &&
             cantidad_nuevo != "" &&
-            precio_nuevo != "") {
+            precio_nuevo != "" &&
+            cantidad_nuevo >= 0 &&
+            precio_nuevo > 0) {
 
             let envio = {
                 id: 0,
@@ -337,7 +343,18 @@ $(document).ready(function () {
 
         } else {
 
-            alert("Todos los campos deben ser completados.");
+            if (nombre_nuevo == "" ||
+                descripcion_nuevo == "" ||
+                cantidad_nuevo == "" ||
+                precio_nuevo == "") {
+
+                alert("Todos los campos deben ser completados.");
+            }
+
+            if (cantidad_nuevo < 0 || precio_nuevo <= 0) {
+
+                alert("Precio no puede ser cero o menor. Cantida no puede ser negativa")
+            }
 
         }
     });
@@ -349,12 +366,12 @@ $(document).ready(function () {
     });
 
     //Para el filtrado de la tabla. 
-    $("#filtrado").on("keyup", function() {
+    $("#filtrado").on("keyup", function () {
         var value = $(this).val().toLowerCase();
-        $("#listado tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        $("#listado tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
-      });
+    });
 
 
 });
