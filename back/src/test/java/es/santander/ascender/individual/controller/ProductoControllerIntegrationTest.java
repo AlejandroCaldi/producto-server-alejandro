@@ -49,6 +49,8 @@ public class ProductoControllerIntegrationTest {
                  // Creado para testear duplicidad en alta
                 producto4 = new Producto(3, "Producto C", "Descripción C", 150.0f, 20);
 
+
+                productoController.getProductos().clear();
                 productoController.getProductos().put(1l, producto1);
                 productoController.getProductos().put(2l, producto2);
         }
