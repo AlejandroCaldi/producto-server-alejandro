@@ -110,8 +110,6 @@ $(document).ready(function () {
 
     // Definiciones de eventos. (Clicks)
 
-
-
     $(document).ready(function() {
 
         // Accionar tras botón de compra
@@ -182,7 +180,7 @@ $(document).ready(function () {
 
     // Habilita los controles para el cambio de precio
     $('#listado').on("click", ".boton_edicion", function (event) {
-        event.preventDefault(); // Prevent default behavior
+        event.preventDefault(); 
 
         let $row = $(this).closest('tr');
         let prodId = $row.find('td').eq(0).text();
@@ -205,7 +203,7 @@ $(document).ready(function () {
     // Graba el cambio de precio enviando petición al servidor.
     $("#boton_graba_edicion").on("click", function (event) {
 
-        event.preventDefault(); // Prevent default behavior
+        event.preventDefault();
 
         let $precio = $("#edicion");
         let prodId = Number($("#id_edicion").val());
@@ -350,7 +348,7 @@ $(document).ready(function () {
         refrescarListado();
     });
 
-    //Para el fintrado de la tabla. 
+    //Para el filtrado de la tabla. 
     $("#filtrado").on("keyup", function() {
         var value = $(this).val().toLowerCase();
         $("#listado tr").filter(function() {
